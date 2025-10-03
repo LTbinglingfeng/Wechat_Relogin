@@ -1,17 +1,3 @@
-# Copyright (C) 2025 LTbinglingfeng
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import win32gui
 import win32con
 import win32api
@@ -25,16 +11,17 @@ import ctypes
 import argparse
 
 if sys.stdout.encoding is None or sys.stdout.encoding.lower().replace('-', '') != 'utf8':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True) 
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True)  #解决webui显示字符问题
 
 
 def sign_out_wechat():
     """
     强制关闭现有微信进程。
     """
-    wechat_exe_name = "WeChat.exe"
+    process_names = ["WeChat.exe", "Weixin.exe"]
     print("正在尝试关闭现有的微信进程...")
-    os.system(f'taskkill /F /IM {wechat_exe_name} > nul 2>&1')
+    for process_name in process_names:
+        os.system(f'taskkill /F /IM {process_name} > nul 2>&1')
     time.sleep(1)
     print("微信进程已关闭。")
 
@@ -85,15 +72,18 @@ def restart_and_find_wechat():
     """
     强制关闭现有微信进程，然后重新启动它。
     """
-    wechat_exe_name = "WeChat.exe"
+    process_names = ["WeChat.exe", "Weixin.exe"]
     
     print("正在尝试关闭现有的微信进程...")
-    os.system(f'taskkill /F /IM {wechat_exe_name} > nul 2>&1')
+    for process_name in process_names:
+        os.system(f'taskkill /F /IM {process_name} > nul 2>&1')
     time.sleep(1) 
 
     possible_paths = [
         os.path.join(os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)"), "Tencent\\WeChat\\WeChat.exe"),
         os.path.join(os.environ.get("ProgramFiles", "C:\\Program Files"), "Tencent\\WeChat\\WeChat.exe"),
+        os.path.join(os.environ.get("ProgramFiles", "C:\\Program Files"), "Tencent\\Weixin\\Weixin.exe"),
+        os.path.join(os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)"), "Tencent\\Weixin\\Weixin.exe"),
     ]
     
     wechat_path = None
@@ -244,7 +234,7 @@ if __name__ == "__main__":
     else:
         print("没有提供有效参数。请使用 -login 或 -signout。")
         print("用法示例:")
-        print("  python Wechat_Relogin.py -login")
-        print("  python Wechat_Relogin.py -login -bot")
-        print("  python Wechat_Relogin.py -signout")
-        print("  python Wechat_Relogin.py -signout -botout")
+        print("  python Relogin.py -login")
+        print("  python Relogin.py -login -bot")
+        print("  python Relogin.py -signout")
+        print("  python Relogin.py -signout -botout")
