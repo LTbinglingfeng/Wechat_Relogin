@@ -16,7 +16,7 @@ Wechat_Relogin 是一个用于自动登录微信PC版的Python工具，支持自
 
 - Windows 操作系统
 - Python 3.6+
-- 微信PC版已安装(3.9版本)
+- 微信PC版已安装
 - 依赖库：
   - pywin32
   - Pillow
